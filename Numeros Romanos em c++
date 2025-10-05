@@ -1,0 +1,281 @@
+9. Desenvolva um programa que leia um número arábico inteiro, positivo, maior ou igual a 1 e menor
+ou igual a 3.999; então converta esse número para sua representação em romano. Por exemplo, se
+o usuário digitar 546 o programa deverá exibir o seguinte número romano DXLVI. O programa
+deve ser finalizado quando usuário digitar zero. Considere a seguinte tabela para elaborar o
+programa:
+
+Algarismo Romano Número Arábico
+I 1
+V 5
+X 10
+L 50
+C 100
+D 500
+M 1000
+As regras para escrever um número romano são as seguintes:
+i. Os números romanos I, X, C, M podem ser repetidos até três vezes, no máximo, assim:
+
+I = 1 II = 2 III = 3
+X = 10 XX = 20 XXX = 30
+C = 100 CC = 200 CCC = 300
+M = 1000 MM = 2000 MMM = 3000
+
+ii. Os números 4, 40 e 400 são obtidos através da junção dos números romanos I, X, C com os
+números V, L, D, respectivamente:
+
+IV = 4 XL = 40 CD = 400
+
+iii. Os números 9, 90 e 900 são obtidos através da junção dos números romanos I, X, C com os
+números X, C, M, respectivamente:
+
+IX = 9 XC = 90 CM = 900
+
+Atenção: Use a interface da classe abaixo para desenvolver esse programa chamado
+
+ArabicToRoman com as seguintes funções:
+1. lê o número arábico inteiro e positivo;
+2. cria o objeto NumeroRomano;
+3. invoca os métodos da classe desse objeto;
+4. exibe o resultado do número arábico convertido para romano.
+
+// Interface da classe NumeroRomano.
+#include <string>
+using namespace std;
+
+6 / 11
+
+/* Representa um objeto imutável com o valor de um número inteiro positivo usando os algarismos arábicos e
+romanos.
+*/
+class NumeroRomano {
+private:
+string numeroRomano;
+unsigned int numeroArabico;
+public:
+// Inicia os atributos do objeto NumeroRomano com os valores do número arábico e romano.
+NumeroRomano(unsigned int numeroArabico);
+// Inicia os atributos do objeto NumeroRomano com os valores do número romano e arábico.
+NumeroRomano(string numeroRomano);
+// Retorna o valor do número romano.
+string getNumeroRomano();
+// Retorna o valor do número arábico.
+unsigned int getNumeroArabico();
+/* Retorna uma string usando o formato NúmeroArábico -> NúmeroRomano
+Exemplos:
+
+27 -> XXVII
+150 -> CL
+
+*/
+string toString();
+// Converte o número arábico para romano.
+string converterArabicoParaRomano(unsigned int numeroArabico);
+// Converte o número romano para arábico.
+unsigned int converterRomanoParaArabico(string numeroRomano);
+
+
+
+
+// Interface da classe Ascii.
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <clocale>
+
+// Interface da classe NumeroRomano.
+
+using namespace std;
+
+/* Representa um objeto imutável com o valor de um número inteiro positivo usando os algarismos arábicos e
+romanos.
+*/
+class NumeroRomano {
+private:
+	string numeroRomano;
+	unsigned int numeroArabico;
+public:
+	// Inicia os atributos do objeto NumeroRomano com os valores do número arábico e romano.
+	NumeroRomano(unsigned int numeroArabico);
+	// Inicia os atributos do objeto NumeroRomano com os valores do número romano e arábico.
+	NumeroRomano(string numeroRomano);
+	// Retorna o valor do número romano.
+	string getNumeroRomano();
+	// Retorna o valor do número arábico.
+	unsigned int getNumeroArabico();
+	/* Retorna uma string usando o formato NúmeroArábico -> NúmeroRomano
+	Exemplos:
+
+	27 -> XXVII
+	150 -> CL
+
+	*/
+	string toString();
+	// Converte o número arábico para romano.
+	string converterArabicoParaRomano(unsigned int numeroArabico);
+	// Converte o número romano para arábico.
+	unsigned int converterRomanoParaArabico(string numeroRomano);
+};
+
+
+
+#include "startHere.hpp"
+#include <iostream>
+
+using namespace std;
+
+NumeroRomano::NumeroRomano(unsigned int numeroArabico) {
+    this->numeroArabico = numeroArabico;
+    this->numeroRomano = converterArabicoParaRomano(numeroArabico);
+}
+
+NumeroRomano::NumeroRomano(string numeroRomano) {
+    this->numeroRomano = numeroRomano;
+    this->numeroArabico = converterRomanoParaArabico(numeroRomano);
+}
+
+string NumeroRomano::getNumeroRomano() {
+    return numeroRomano;
+}
+
+unsigned int NumeroRomano::getNumeroArabico() {
+    return numeroArabico;
+}
+
+string NumeroRomano::toString() {
+    return to_string(numeroArabico) + " -> " + numeroRomano;
+}
+
+string NumeroRomano::converterArabicoParaRomano(unsigned int numeroArabico) {
+    int arabic = numeroArabico;
+    string romain;
+
+    while (1) {
+        if (arabic >= 1000) {
+            romain += "M";
+            arabic -= 1000;
+        }
+        else if (arabic >= 900) {
+            romain += "CM";
+            arabic -= 900;
+        }
+        else if (arabic >= 500) {
+            romain += "D";
+            arabic -= 500;
+        }
+        else if (arabic >= 400) {
+            romain += "CD";
+            arabic -= 400;
+        }
+        else if (arabic >= 100) {
+            romain += "C";
+            arabic -= 100;
+        }
+        else if (arabic >= 90) {
+            romain += "XC";
+            arabic -= 90;
+        }
+        else if (arabic >= 50) {
+            romain += "L";
+            arabic -= 50;
+        }
+        else if (arabic >= 40) {
+            romain += "XL";
+            arabic -= 40;
+        }
+        else if (arabic >= 10) {
+            romain += "X";
+            arabic -= 10;
+        }
+        else if (arabic == 9) {
+            romain += "IX";
+            arabic = 0;
+        }
+        else if (arabic >= 5) {
+            romain += "V";
+            arabic -= 5;
+        }
+        else if (arabic == 4) {
+            romain += "IV";
+            arabic = 0;
+        }
+        else if (arabic >= 1) {
+            romain += "I";
+            arabic -= 1;
+        }
+
+        if (arabic == 0) break;
+    }
+
+    return romain;
+}
+
+unsigned int NumeroRomano::converterRomanoParaArabico(string numeroRomano) {
+    int size = numeroRomano.length();
+    int arabicNumber = 0;
+
+    for (int c = 0; c < size; c++) {
+        if (numeroRomano[c] == 'M') {
+            arabicNumber += 1000;
+        }
+        else if (numeroRomano[c] == 'C') {
+            if (c + 1 < size && numeroRomano[c + 1] == 'M') {
+                arabicNumber += 900;
+                c++;
+            }
+            else if (c + 1 < size && numeroRomano[c + 1] == 'D') {
+                arabicNumber += 400;
+                c++;
+            }
+            else {
+                arabicNumber += 100;
+            }
+        }
+        else if (numeroRomano[c] == 'D') {
+            arabicNumber += 500;
+        }
+        else if (numeroRomano[c] == 'X') {
+            if (c + 1 < size && numeroRomano[c + 1] == 'C') {
+                arabicNumber += 90;
+                c++;
+            }
+            else if (c + 1 < size && numeroRomano[c + 1] == 'L') {
+                arabicNumber += 40;
+                c++;
+            }
+            else {
+                arabicNumber += 10;
+            }
+        }
+        else if (numeroRomano[c] == 'L') {
+            arabicNumber += 50;
+        }
+        else if (numeroRomano[c] == 'I') {
+            if (c + 1 < size && numeroRomano[c + 1] == 'X') {
+                arabicNumber += 9;
+                c++;
+            }
+            else if (c + 1 < size && numeroRomano[c + 1] == 'V') {
+                arabicNumber += 4;
+                c++;
+            }
+            else {
+                arabicNumber += 1;
+            }
+        }
+        else if (numeroRomano[c] == 'V') {
+            arabicNumber += 5;
+        }
+    }
+
+    return arabicNumber;
+}
+
+int main() {
+    NumeroRomano nr1(2025);
+    cout << nr1.toString() << endl;
+
+    NumeroRomano nr2("MMXXV");
+    cout << nr2.toString() << endl;
+
+    return 0;
+}
