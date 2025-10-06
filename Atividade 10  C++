@@ -1,0 +1,154 @@
+10. Considere que um sistema para verificar o funcionamento da impressora consegue ler um valor
+da memória desse hardware para sinalizar ao usuário o seu estado. Considere que as situações
+abaixo são sinalizadas quando os bits 0 a 6 estão ligados (1) ou desligados (0).
+b0 = impressora desligada (0) ou ligada (1)
+b1 = impressora sem papel (0) ou com papel (1)
+b2 = buffer da impressora com espaço livre (0) ou cheio (1)
+b3 =cartucho de impressão preto vazio (0) ou com tinta (1)
+b4 =cartucho de impressão vermelho vazio (0) ou com tinta (1)
+b5 =cartucho de impressão verde vazio (0) ou com tinta (1)
+b6 =cartucho de impressão azul vazio (0) ou com tinta (1)
+Use a interface da classe abaixo para desenvolver um programa chamado PrinterStatusTest que:
+1. leia um número inteiro sem sinal (unsigned char);
+2. crie um objeto PrinterStatus para representar o estado da impressora com esse número;
+
+7 / 11
+
+3. informe ao usuário o estado atual da impressora invocando todos os métodos desse objeto.
+O aplicativo deve ser finalizado quando o usuário digitar zero.
+A implementação dos métodos da classe PrinterStatus deve considerar os valores dos primeiros
+sete (7) bits do número fornecido pelo usuário para obter o estado da impressora. Como esses bits
+são usados para sinalizar o funcionamento da impressora e esse pode ser alterado a qualquer
+instante, é possível que o programa informe que a impressora está, por exemplo, desligada, com
+papel, o buffer está cheio, os cartuchos preto e coloridos estão com tinta. No entanto, imagine a
+seguinte situação: a impressora estava imprimindo um documento e o usuário a desligou
+acidentalmente, ou seja, a impressora está com papel, os cartuchos preto e coloridos estão com tinta,
+o buffer está cheio e o seu estado mudou de ligada para desligada porque a impressão foi
+interrompida quando o usuário desligou a impressora. Esse cenário exige que o programa fique em
+loop lendo e informando o status da impressora até que o usuário tecle zero.
+// Interface da classe PrinterStatus. Representa um objeto imutável com o status da impressora.
+class PrinterStatus {
+private:
+unsigned char status;
+public:
+// Inicia o objeto com o status inicial da impressora.
+PrinterStatus(unsigned char status);
+// Obtém o status atual da impressora.
+unsigned char getStatus();
+// Retorna true se a impressora está ligada ou false se está desligada.
+bool printerOn();
+// Retorna true se a impressora está com papel ou false se está sem papel.
+bool printerWithPaper();
+// Retorna true se o buffer da impressora está cheio ou false se está com espaço livre.
+bool printerBufferFull();
+// Informa true se o cartucho de impressão preto está com tinta ou false se está vazio.
+bool blackPrintCartridge();
+// Informa true se o cartucho de impressão vermelho está com tinta ou false se está vazio.
+bool redPrintCartridge();
+// Informa true se o cartucho de impressão verde está com tinta ou false se está vazio.
+bool greenPrintCartridge();
+// Informa true se o cartucho de impressão azul está com tinta ou false se está vazio.
+bool bluePrintCartridge();
+};
+
+
+
+#include "startHere.hpp"
+#include <iostream>
+
+using namespace std;
+
+// Inicia o objeto com o status inicial da impressora.
+PrinterStatus::PrinterStatus(unsigned char status) {
+    this->status = status;
+}
+// Obtém o status atual da impressora.
+unsigned char PrinterStatus::getStatus() {
+    return status;
+}
+// Retorna true se a impressora está ligada ou false se está desligada.
+bool PrinterStatus::printerOn() {
+    return (status & (1 << 0) != 0);
+}
+// Retorna true se a impressora está com papel ou false se está sem papel.
+bool PrinterStatus::printerWithPaper() {
+    return (status & (1 << 1)) != 0;
+}
+// Retorna true se o buffer da impressora está cheio ou false se está com espaço livre.
+bool PrinterStatus::printerBufferFull() {
+    return (status & (1 << 2)) != 0;
+}
+// Informa true se o cartucho de impressão preto está com tinta ou false se está vazio.
+bool PrinterStatus::blackPrintCartridge() {
+    return (status & (1 << 3)) != 0;
+}
+// Informa true se o cartucho de impressão vermelho está com tinta ou false se está vazio.
+bool PrinterStatus::redPrintCartridge() {
+    return (status & (1 << 4)) != 0;
+}
+// Informa true se o cartucho de impressão verde está com tinta ou false se está vazio.
+bool PrinterStatus::greenPrintCartridge() {
+    return (status & (1 << 5)) != 0;
+}
+// Informa true se o cartucho de impressão azul está com tinta ou false se está vazio.
+bool PrinterStatus::bluePrintCartridge() {
+    return (status & (1 << 6)) != 0;
+}
+
+int main() {
+    PrinterStatus printer(6);
+
+
+    cout << "Number informe by the user: " << (int)printer.getStatus() << endl;
+    cout << "Is the printer on?? " << (printer.printerOn() == 1 ? "Yes" : "No") << endl;
+    cout << "Does the printer have paper on? " << (printer.printerWithPaper() == 1 ? "Yes" : "No") << endl;
+    cout << "Is the printer buffer full? " << (printer.printerBufferFull() == 1 ? "Yes" : "No") << endl;
+    cout << "Is the black printer cartridge empty? " << (printer.blackPrintCartridge() == 1 ? "Yes" : "No") << endl;
+    cout << "Is the red printer cartridge empty? " << (printer.redPrintCartridge() == 1 ? "Yes" : "No") << endl;
+    cout << "Is the green printer cartridge empty? " << (printer.greenPrintCartridge() == 1 ? "Yes" : "No") << endl;
+    cout << "Is the blue printer cartridge empty? " << (printer.bluePrintCartridge() == 1 ? "Yes" : "No") << endl;
+
+    return 0;
+}
+
+
+
+#ifndef PRINTERSTATUS_HPP
+#define PRINTERSTATUS_HPP
+
+// Interface da classe Ascii.
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <clocale>
+
+// Interface da classe NumeroRomano.
+
+using namespace std;
+
+// Interface da classe PrinterStatus. Representa um objeto imutável com o status da impressora.
+class PrinterStatus {
+private:
+	unsigned char status;
+public:
+	// Inicia o objeto com o status inicial da impressora.
+	PrinterStatus(unsigned char status);
+	// Obtém o status atual da impressora.
+	unsigned char getStatus();
+	// Retorna true se a impressora está ligada ou false se está desligada.
+	bool printerOn();
+	// Retorna true se a impressora está com papel ou false se está sem papel.
+	bool printerWithPaper();
+	// Retorna true se o buffer da impressora está cheio ou false se está com espaço livre.
+	bool printerBufferFull();
+	// Informa true se o cartucho de impressão preto está com tinta ou false se está vazio.
+	bool blackPrintCartridge();
+	// Informa true se o cartucho de impressão vermelho está com tinta ou false se está vazio.
+	bool redPrintCartridge();
+	// Informa true se o cartucho de impressão verde está com tinta ou false se está vazio.
+	bool greenPrintCartridge();
+	// Informa true se o cartucho de impressão azul está com tinta ou false se está vazio.
+	bool bluePrintCartridge();
+};
+
+#endi
