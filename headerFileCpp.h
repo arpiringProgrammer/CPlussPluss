@@ -4,36 +4,19 @@
 #include <string>
 using namespace std;
 
-
-
-/* Representa um objeto imutável com o valor de um número inteiro positivo usando os algarismos arábicos e
-romanos.
-*/
-class NumeroRomano {
+class Hexadecimal {
 private:
-    string numeroRomano;
-    unsigned int numeroArabico;
+    string hexadecimal;
+
 public:
-// Inicia os atributos do objeto NumeroRomano com os valores do número arábico e romano.
-NumeroRomano(unsigned int numeroArabico);
-// Inicia os atributos do objeto NumeroRomano com os valores do número romano e arábico.
-NumeroRomano(string numeroRomano);
-// Retorna o valor do número romano.
-string getNumeroRomano();
-// Retorna o valor do número arábico.
-unsigned int getNumeroArabico();
-/* Retorna uma string usando o formato NúmeroArábico -> NúmeroRomano
-Exemplos:
+    Hexadecimal() = default;
+    Hexadecimal(string hexadecimal);
 
-27 -> XXVII
-150 -> CL
+    void setNumber(string hexadecimal);
+    string getHexadecimal(); // ← nome alterado
+    unsigned int decimal();
 
-*/
-string toString();
-// Converte o número arábico para romano.
-string converterArabicoParaRomano(unsigned int numeroArabico);
-// Converte o número romano para arábico.
-unsigned int converterRomanoParaArabico(string numeroRomano);
+    operator int(); // permite retorno direto no main
 };
 
 #endif
