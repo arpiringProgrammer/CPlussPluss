@@ -1,0 +1,59 @@
+#include <iostream>
+#include <iomanip>
+#include "headerFileCpp.h"
+
+using namespace std;
+
+/*
+9. A série de Fibonacci pode ser definida recursivamente assim:
+
+fibonacci(0) = 0
+fibonacci(1) = 1
+fibonacci(n) = fibonacci(n - 1) + fibonacci(n - 2)
+
+Escreva uma função usando a palavra reservada constexpr para calcular a série de Fibonacci. Em
+seguida, crie um programa para calcular os dez primeiros números da série.
+*/
+
+constexpr int fibonacci(int n) {
+    return (n <= 1) ? n : fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int program() {
+    int sum = 0;
+    for (int i = 0; i < 10; i++) {
+        sum += fibonacci(i);
+    }
+
+    cout << "A soma da sere de fibonacci é: " << sum << endl;
+    return 1;
+}
+
+// 🎬 Função principal
+int main() { return program(); }
+
+
+
+
+#ifndef HEADERFILECPP_H
+#define HEADERFILECPP_H
+
+#include <string>
+using namespace std;
+
+/*
+9. A série de Fibonacci pode ser definida recursivamente assim:
+
+fibonacci(0) = 0
+fibonacci(1) = 1
+fibonacci(n) = fibonacci(n - 1) + fibonacci(n - 2)
+
+Escreva uma função usando a palavra reservada constexpr para calcular a série de Fibonacci. Em
+seguida, crie um programa para calcular os dez primeiros números da série.
+*/
+
+constexpr int fibonacci(int limit);
+int program();
+
+#endif
+
