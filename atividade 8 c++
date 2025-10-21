@@ -1,0 +1,137 @@
+/*
+7. Desenvolva uma classe chamada Pesquisa composta dos métodos públicos abaixo e uma variável
+local estática em cada função-membro.
+/* Pesquisa por todas as ocorrências do caractere na string (str). Retorna a posição onde o caractere foi
+localizado ou -1 caso contrário. A pesquisa se inicia na primeira posição da string quando a função é
+chamada pela primeira vez. Se o caractere foi localizado, nas chamadas seguintes a pesquisa continua
+na primeira posição (p+1) após a posição (p) onde o caractere foi localizado na chamada anterior.
+*/
+int pesquisar(char caractere, const string& str);
+/* Pesquisa por todas as ocorrências da substring (substr) na string (str). Retorna a posição onde a
+substring foi localizada ou -1 caso contrário. A pesquisa se inicia na primeira posição da string quando
+a função é chamada pela primeira vez. Se a substring foi localizada, nas chamadas seguintes a
+pesquisa continua na primeira posição (p+1) após a posição (p) do último caractere da substring
+localizada na chamada anterior.
+*/
+int pesquisar(const string& substr, const string& str);
+
+8. Crie um programa chamado TestarPesquisa para testar as funções sobrecarregadas do Exercício 7. O
+programa deve exibir as posições onde o caractere e a substring foram localizadas na string. Use o
+leiaute abaixo para exibir a saída do programa com o resultado das pesquisas.
+Caractere = ‘a’
+String = “Ciência da Computação”
+Posições = 6, 9 e 17
+Substring = “chuva”
+String = “Previsão de chuva intensa para o fim de semana. A chuva deve chegar a 30 mm sul do país.”
+Posições = 12 e 50
+*/
+
+
+
+#include <iostream>
+#include <iomanip>
+#include "headerFileCpp.h"
+
+using namespace std;
+
+// 🔍 Pesquisa por todas as ocorrências do caractere
+int Pesquisa::pesquisar(char caractere, const string& str) {
+    static int index = 0;
+    for (int p = index; p < str.length(); p++) {
+        if (caractere == str[p]) {
+            index = p + 1;
+            return p;
+        }
+    }
+    index = 0;
+    return -1;
+}
+
+// 🔍 Pesquisa por todas as ocorrências da substring
+int Pesquisa::pesquisar(const string& substr, const string& str) {
+    static int index = 0;
+    for (int p = index; p <= str.length() - substr.length(); p++) {
+        bool match = true;
+        for (int i = 0; i < substr.length(); i++) {
+            if (str[p + i] != substr[i]) {
+                match = false;
+                break;
+            }
+        }
+        if (match) {
+            index = p + substr.length();
+            return p;
+        }
+    }
+    index = 0;
+    return -1;
+}
+
+// 🧪 Função auxiliar para testar pesquisa de caractere
+int Pesquisa::testarPesquisa(char caractere, const string& str) {
+    Pesquisa p;
+    int retorno = 0;
+    cout << "Caractere = " << caractere << endl;
+    cout << "String = " << str << endl;
+    cout << "Posicoes = ";
+    while (true) {
+        retorno = p.pesquisar(caractere, str);
+        if (retorno == -1) break;
+        cout << retorno << " ";
+    }
+    cout << endl << endl;
+    return 0;
+}
+
+// 🧪 Função auxiliar para testar pesquisa de substring
+int Pesquisa::testarPesquisa(const string& substr, const string& str) {
+    Pesquisa p;
+    int retorno = 0;
+    cout << "Substring = " << substr << endl;
+    cout << "String = " << str << endl;
+    cout << "Posicoes = ";
+    while (true) {
+        retorno = p.pesquisar(substr, str);
+        if (retorno == -1) break;
+        cout << retorno << " ";
+    }
+    cout << endl << endl;
+    return 0;
+}
+
+// 🚀 Método principal da classe Pesquisa
+int Pesquisa::pesquisa() {
+    string str1 = "Ciencia da Computacao";
+    char caractere = 'a';
+    testarPesquisa(caractere, str1);
+
+    string substr = "chuva";
+    string str2 = "Previsao de chuva intensa para o fim de semana. A chuva deve chegar a 30 mm sul do pais.";
+    testarPesquisa(substr, str2);
+
+    return 0;
+}
+
+// 🎬 Função principal
+int main() {return Pesquisa().pesquisa();}
+
+
+
+
+
+#ifndef HEADERFILECPP_H
+#define HEADERFILECPP_H
+
+#include <string>
+using namespace std;
+
+class Pesquisa {
+public:
+    int pesquisar(char caractere, const string& str);
+    int pesquisar(const string& substr, const string& str);
+    int pesquisa();
+    int testarPesquisa(const string& substr, const string& str);
+    int testarPesquisa(const char caractere, const string& str);
+};
+
+#endif
