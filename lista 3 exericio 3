@@ -1,0 +1,94 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include "headerFileCpp.h"
+
+
+using namespace std;
+
+/*
+3. Desenvolva um programa para testar os templates de função criados no Exercício 2. Use os
+seguintes tipos de dados do C++: char, int, double e string.
+*/
+
+// a) Pesquisa elemento
+template <typename T, std::size_t N> int searchElement(const T (&array)[N], const T& element) {
+    for (size_t i = 0; i < N; ++i) {
+        if (array[i] == element) {
+            return static_cast<int>(i);
+        }
+    }
+    return -1;
+}
+
+// b) Ordenar ascendente
+template <typename T, std::size_t N> void ascendingOrder(T (&array)[N]) {
+    for (size_t i = 0; i < N - 1; ++i) {
+        for (size_t j = i + 1; j < N; ++j) {
+            if (array[i] > array[j]) {
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+    cout << endl;
+}
+
+// c) Ordenar descendente
+template <typename T, std::size_t N> void descendingOrder(T (&array)[N]) {
+    for (size_t i = 0; i < N - 1; ++i) {
+        for (size_t j = i + 1; j < N; ++j) {
+            if (array[i] < array[j]) {
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+    cout << endl;
+}
+
+// d) Exibir elementos
+template <typename T, std::size_t N> void showingElements(const T (&array)[N]) {
+    for (const auto& e : array)
+        std::cout << e << " ";
+    std::cout << "\n";
+}
+
+template <typename T, std::size_t N> void everyThing(T (&array)[N]) {
+    std::cout << "Showing the vector:" << std::endl;
+    showingElements(array);
+
+    T num = array[3];
+    int position = searchElement(array, num);
+    std::cout << "The element " << num << " is located in the position " << position << std::endl;
+
+    ascendingOrder(array);
+    std::cout << "After ascending order: ";
+    showingElements(array);
+
+    descendingOrder(array);
+    std::cout << "After descending order: ";
+    showingElements(array);
+
+    std::cout << std::endl;
+}
+
+int testarFuncao() {
+    int vetor1[5] = {10, 4, 7, 3, 9};
+    float vetor2[5] = {1.1f, 3.3f, 6.6f, 7.7f, 9.9f};
+    char vetor3[5] = {'a', 'z', 'm', 'e', 't'};
+    string vetor4[5] = {"10", "4", "7", "3", "9"};
+
+    everyThing(vetor1);
+    everyThing(vetor2);
+    everyThing(vetor3);
+    everyThing(vetor4);
+    
+    return 1;
+}
+
+
+// 🎬 Função principal
+int main() { return testarFuncao(); }
