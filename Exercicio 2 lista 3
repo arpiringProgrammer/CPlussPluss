@@ -1,0 +1,145 @@
+/*
+2. Crie um template de função que forneça a criação de funções para manipular arrays
+unidimensionais (vetores) de qualquer tamanho e tipo de dado primitivo ou string do C++. Escreva
+um template para cada função descrita abaixo.
+a) Pesquisa no vetor por um elemento do tipo de dado do vetor. A função deve retornar a
+posição onde o elemento foi encontrado, caso contrário retorna -1.
+b) Classifica os elementos do vetor em ordem ascendente.
+c) Classificar os elementos do vetor em ordem descendente.
+d) Exibe os elementos do vetor.
+ATENÇÃO: Armazene os templates de função em um único arquivo de cabeçalho e não use a
+classe vector do C++. O vector encapsula um vetor dinâmico e o vetor é uma
+estrutura de dados estática, pois possui tamanho fixo.
+*/
+
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include "headerFileCpp.h"
+#define TAM 10
+
+using namespace std;
+
+/*
+2. Crie um template de função que forneça a criação de funções para manipular arrays
+unidimensionais (vetores) de qualquer tamanho e tipo de dado primitivo ou string do C++. Escreva
+um template para cada função descrita abaixo.
+a) Pesquisa no vetor por um elemento do tipo de dado do vetor. A função deve retornar a
+posição onde o elemento foi encontrado, caso contrário retorna -1.
+b) Classifica os elementos do vetor em ordem ascendente.
+c) Classificar os elementos do vetor em ordem descendente.
+d) Exibe os elementos do vetor.
+ATENÇÃO: Armazene os templates de função em um único arquivo de cabeçalho e não use a
+classe vector do C++. O vector encapsula um vetor dinâmico e o vetor é uma
+estrutura de dados estática, pois possui tamanho fixo.
+*/
+
+// a) Pesquisa elemento
+template <typename T, std::size_t N> int searchElement(const T (&array)[N], const T& element) {
+    for (size_t i = 0; i < N; ++i) {
+        if (array[i] == element) {
+            i++;
+            return static_cast<int>(i);
+        }
+    }
+    return -1;
+}
+
+// b) Ordenar ascendente
+template <typename T, std::size_t N> void ascendingOrder(T (&array)[N]) {
+    for (size_t i = 0; i < N - 1; ++i) {
+        for (size_t j = i + 1; j < N; ++j) {
+            if (array[i] > array[j]) {
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+    cout << endl;
+}
+
+// c) Ordenar descendente
+template <typename T, std::size_t N> void descendingOrder(T (&array)[N]) {
+    for (size_t i = 0; i < N - 1; ++i) {
+        for (size_t j = i + 1; j < N; ++j) {
+            if (array[i] < array[j]) {
+                T temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+    cout << endl;
+}
+
+// d) Exibir elementos
+template <typename T, std::size_t N> void showingElements(const T (&array)[N]) {
+    for (const auto& e : array)
+        std::cout << e << " ";
+    std::cout << "\n";
+}
+
+int testarFuncao() {
+    int vetor[5] = {10, 4, 7, 3, 9};
+
+    cout << "Showing the vector:" << endl;
+
+    showingElements(vetor);
+
+    int position = searchElement(vetor, 7);
+
+    cout << "The element " << 7 << " is located in the position " << position << endl;
+
+    ascendingOrder(vetor);
+
+    showingElements(vetor);
+
+    descendingOrder(vetor);
+
+    showingElements(vetor);
+    return 1;
+}
+
+
+// 🎬 Função principal
+int main() { return testarFuncao(); }
+
+
+
+
+
+#ifndef HEADERFILECPP_H
+#define HEADERFILECPP_H
+
+#include <string>
+using namespace std;
+
+/*
+2. Crie um template de função que forneça a criação de funções para manipular arrays
+unidimensionais (vetores) de qualquer tamanho e tipo de dado primitivo ou string do C++. Escreva
+um template para cada função descrita abaixo.
+a) Pesquisa no vetor por um elemento do tipo de dado do vetor. A função deve retornar a
+posição onde o elemento foi encontrado, caso contrário retorna -1.
+b) Classifica os elementos do vetor em ordem ascendente.
+c) Classificar os elementos do vetor em ordem descendente.
+d) Exibe os elementos do vetor.
+ATENÇÃO: Armazene os templates de função em um único arquivo de cabeçalho e não use a
+classe vector do C++. O vector encapsula um vetor dinâmico e o vetor é uma
+estrutura de dados estática, pois possui tamanho fixo.
+*/
+
+
+template <typename T, std::size_t N> int searchElement(const T (&array)[N], const T& element);
+
+// b) Ordenar ascendente
+template <typename T, std::size_t N> void ascendingOrder(T (&array)[N]);
+
+// c) Ordenar descendente
+template <typename T, std::size_t N> void descendingOrder(T (&array)[N]);
+
+// d) Exibir elementos
+template <typename T, std::size_t N> void showingElements(const T (&array)[N]);
+
+#endif
