@@ -1,0 +1,248 @@
+Produto.hpp
+
+
+
+// Produto.h - Interface da classe Produto
+#include <string>
+using namespace std;
+class Produto
+{
+private:
+	string nome; // Nome do produto.
+	int quantidade = 0; // Quantidade do produto armazenada em estoque.
+	double preco = 0; // Preço unitário do produto.
+public:
+	Produto(string nome = "", int quantidade = 0, double preco = 0);
+	void setNome(string nome);
+	void setQuantidade(int quantidade);
+	void setPreco(double preco);
+	string getNome() const;
+	int getQuantidade() const;
+	double getPreco() const;
+};
+
+Produto.cpp
+
+#include <iostream>
+#include <string>
+#include "Produto.hpp"
+#include "Estoque.hpp"
+
+using namespace std;
+
+/*
+Implemente as duas classes definidas acima e crie um programa para:
+a) Criar três estoques de acordo com o tipo do produto: alimentos, limpeza e higiene pessoal.
+b) Cadastrar no estoque os dados do produto segundo o tipo do estoque escolhido pelo usuário.
+c) Calcular e exibir o valor total de cada estoque criado pelo usuário.
+d) Calcular e exibir a quantidade de todos os produtos armazenados em cada estoque.
+e) Localizar no estoque o nome de um produto fornecido pelo usuário.
+f) Exibir um relatório usando o leiaute abaixo.
+- Estoque de Gêneros Alimentícios
+Produto Quantidade Preço Unitário Valor Total
+1. AAAA 99 99,99 R$ 9.999,99
+2. BBBB 99 99,99 R$ 9.999,99
+Total de Peças no Estoque: 999 Valor Total do Estoque: R$ 999.999,99
+- Estoque de Produtos de Limpeza
+Produto Quantidade Preço Unitário Valor Total
+1. CCCC 99 99,99 R$ 9.999,99
+2. DDDD 99 99,99 R$ 9.999,99
+Total de Peças no Estoque: 999 Valor Total do Estoque: R$ 999.999,99
+- Estoque de Produtos de Higiene Pessoal
+Produto Quantidade Preço Unitário Valor Total
+1. EEEE 99 99,99 R$ 9.999,99
+2. FFFF 99 99,99 R$ 9.999,99
+Total de Peças no Estoque: 999 Valor Total do Estoque: R$ 999.999,99
+*/
+
+Produto::Produto(string nome, int quantidade, double preco) {
+	this->nome = nome;
+	this->quantidade = quantidade;
+	this->preco = preco;
+}
+
+void Produto::setNome(string nome) {
+	this->nome = nome;
+}
+
+void Produto::setQuantidade(int quantidade) {
+	this->quantidade = quantidade;
+}
+
+void Produto::setPreco(double preco) {
+	this->preco = preco;
+}
+
+string Produto::getNome() {
+	return nome;
+}
+
+int Produto::getQuantidade() {
+	return quantidade;
+}
+
+double Produto::getPreco() {
+	return preco;
+}
+
+
+
+
+// Estoque.h - Interface da classe Estoque
+#include <vector>
+#include <optional>
+#include "Produto.hpp"
+
+
+using namespace std;
+
+class Estoque
+{
+private:
+	// Relação de produtos do estoque.
+	vector<Produto> estoque;
+	// Quantidade de produtos cadastrados no estoque.
+	int quantidadeProdutos = 0;
+
+public:
+	// Cria um estoque de produtos com tamanho inicial igual a zero.
+	Estoque() = default;
+	// Cria um estoque de produtos com capacidade inicial de armazenamento definida.
+	Estoque(int capacidade);
+	// Acrescenta um produto no estoque.
+	void adicionarProduto(Produto p);
+	// Obtém o objeto Produto armazenado no estoque na posição indicada.
+	optional<Produto> obterProduto(int posicao);
+	/* Pesquisa o nome do produto no estoque.
+	Retorna a posição do produto no estoque, se o produto não estiver cadastrado retorna -1.
+	*/
+	int pesquisarProduto(string nome);
+	/* Exclui um produto do estoque na posição indicada. Retorna true se o produto foi excluído, caso
+	contrário retorna false.
+	*/
+	bool removerProduto(int posicao);
+
+	double calcularTotalEstoque(vector<Produto> estoque);
+
+	// calcula e exibi a quantidade de todos os produtos armazenados em cada estoque
+	int calcularQuantidadeEstoque(vector<Produto> estoque);
+
+	void exibirRelatorio(vector<Produto> estoque, string nomeEstoque);
+};
+
+
+
+#include <iostream>
+#include <string>
+#include "Estoque.hpp"
+#include "Produto.hpp"
+#include <iomanip>
+
+using namespace std;
+
+
+
+
+// Implementação do construtor com capacidade inicial
+Estoque::Estoque(int capacidade) {
+    estoque.reserve(capacidade);
+}
+
+// Adiciona um produto ao estoque
+void Estoque::adicionarProduto(Produto p) {
+    estoque.push_back(p);
+    quantidadeProdutos++;
+}
+
+// Retorna um produto da posição indicada
+optional<Produto> Estoque::obterProduto(int posicao) {
+    if (posicao >= 0 && posicao < estoque.size()) {
+        return estoque[posicao];
+    }
+    return nullopt;
+}
+
+// Pesquisa um produto pelo nome
+int Estoque::pesquisarProduto(string nome) {
+    for (int i = 0; i < estoque.size(); i++) {
+        if (estoque[i].getNome() == nome) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Remove um produto da posição indicada
+bool Estoque::removerProduto(int posicao) {
+    if (posicao >= 0 && posicao < estoque.size()) {
+        estoque.erase(estoque.begin() + posicao);
+        quantidadeProdutos--;
+        return true;
+    }
+    return false;
+}
+
+// Calcula o valor total do estoque
+double calcularTotalEstoque(const vector<Produto>& estoque) {
+    double total = 0;
+    for (const Produto& p : estoque) {
+        total += p.getQuantidade() * p.getPreco();
+    }
+    return total;
+}
+
+// Calcula a quantidade total de produtos
+int calcularQuantidadeEstoque(const vector<Produto>& estoque) {
+    int total = 0;
+    for (const Produto& p : estoque) {
+        total += p.getQuantidade();
+    }
+    return total;
+}
+
+// Exibe o relatório formatado
+void exibirRelatorio(const vector<Produto>& estoque, string nomeEstoque) {
+    cout << "- " << nomeEstoque << endl;
+    cout << "Produto\tQuantidade\tPreço Unitário\tValor Total" << endl;
+
+    for (size_t i = 0; i < estoque.size(); i++) {
+        const Produto& p = estoque[i];
+        double valorTotal = p.getQuantidade() * p.getPreco();
+
+        cout << i + 1 << ". " << p.getNome() << "\t"
+            << p.getQuantidade() << "\t"
+            << fixed << setprecision(2) << p.getPreco() << "\t"
+            << "R$ " << fixed << setprecision(2) << valorTotal << endl;
+    }
+
+    cout << "Total de Peças no Estoque: " << calcularQuantidadeEstoque(estoque) << endl;
+    cout << "Valor Total do Estoque: R$ " << fixed << setprecision(2)
+        << calcularTotalEstoque(estoque) << endl << endl;
+}
+
+// Função principal de teste
+int estoque() {
+    Estoque alimentos(30);
+    Estoque limpeza(30);
+    Estoque higiene(30);
+
+    alimentos.adicionarProduto(Produto("Arroz", 10, 5.99));
+    alimentos.adicionarProduto(Produto("Feijão", 8, 7.49));
+
+    limpeza.adicionarProduto(Produto("Detergente", 15, 2.99));
+    limpeza.adicionarProduto(Produto("Desinfetante", 10, 4.99));
+
+    higiene.adicionarProduto(Produto("Sabonete", 20, 1.99));
+    higiene.adicionarProduto(Produto("Shampoo", 12, 9.99));
+
+    exibirRelatorio(alimentos.estoque, "Estoque de Gêneros Alimentícios");
+    exibirRelatorio(limpeza.estoque, "Estoque de Produtos de Limpeza");
+    exibirRelatorio(higiene.estoque, "Estoque de Produtos de Higiene Pessoal");
+
+    return 0;
+}
+
+// main com apenas uma linha
+int main() {
+    return estoque();
+}
