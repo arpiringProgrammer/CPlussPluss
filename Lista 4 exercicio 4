@@ -1,0 +1,237 @@
+arquivo.cpp
+
+
+#include "template_project.hpp"
+#include <iostream>
+using namespace std;
+
+optional<int> Vetor::indiceReal(int indiceVirtual) {
+    if (indiceVirtual < limiteInferior || indiceVirtual > limiteSuperior) {
+        return nullopt;
+    }
+    int indiceReal = indiceVirtual - limiteInferior;
+    if (indiceReal < 0 || indiceReal >= static_cast<int>(vetor.size())) {
+        return nullopt;
+    }
+    return indiceReal;
+}
+
+void Vetor::definirTamanho(int tamanho) {
+    vetor.resize(tamanho);
+}
+
+Vetor::Vetor(int capacidade) : Vetor(capacidade, 0, capacidade - 1) {}
+
+Vetor::Vetor(int capacidade, int limiteInferior, int limiteSuperior) {
+    definirTamanho(capacidade);
+    this->limiteInferior = limiteInferior;
+    this->limiteSuperior = limiteSuperior;
+}
+
+void Vetor::setNome(string nome) {
+    this->nome = nome;
+}
+
+string Vetor::getNome() {
+    return nome;
+}
+
+int Vetor::getLimiteInferior() {
+    return limiteInferior;
+}
+
+int Vetor::getLimiteSuperior() {
+    return limiteSuperior;
+}
+
+int Vetor::tamanho() {
+    return static_cast<int>(vetor.size());
+}
+
+int Vetor::capacidade() {
+    return limiteSuperior - limiteInferior + 1;
+}
+
+void Vetor::definirIntervalo(int, int) {
+    limiteInferior = -(static_cast<int>(vetor.size()) / 2);
+    limiteSuperior = limiteInferior + static_cast<int>(vetor.size()) - 1;
+}
+
+bool Vetor::adicionar(int numero) {
+    if (static_cast<int>(vetor.size()) < capacidade()) {
+        vetor.push_back(numero);
+        return true;
+    }
+    return false;
+}
+
+optional<int> Vetor::obter(int indice) {
+    optional<int> real = indiceReal(indice);
+    if (real.has_value()) {
+        return vetor[real.value()];
+    }
+    return nullopt;
+}
+
+bool Vetor::alterar(int indice, int numero) {
+    optional<int> real = indiceReal(indice);
+    if (real.has_value()) {
+        vetor[real.value()] = numero;
+        return true;
+    }
+    return false;
+}
+
+bool Vetor::excluir(int indice) {
+    optional<int> real = indiceReal(indice);
+    if (real.has_value()) {
+        vetor.erase(vetor.begin() + real.value());
+        return true;
+    }
+    return false;
+}
+
+int Vetor::comparar(const Vetor& outro) {
+    if (vetor.size() < outro.vetor.size()) {
+        return -1;
+    }
+    else if (vetor.size() > outro.vetor.size()) {
+        return 1;
+    }
+    else {
+        for (size_t i = 0; i < vetor.size(); i++) {
+            if (vetor[i] != outro.vetor[i]) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
+
+bool Vetor::copiar(const Vetor& origem) {
+    int espacoLivre = capacidade() - tamanho();
+    if (espacoLivre >= static_cast<int>(origem.vetor.size())) {
+        for (int valor : origem.vetor) {
+            vetor.push_back(valor);
+        }
+        return true;
+    }
+    return false;
+}
+
+void Vetor::exibir() {
+    if (!nome.empty()) {
+        cout << "Nome do vetor: " << nome << endl;
+    }
+    for (int valor : vetor) {
+        cout << valor << "\t";
+    }
+    cout << endl;
+}
+
+
+
+
+arquivo.hpp
+
+
+
+#pragma once
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Vetor.h - Interface da classe Vetor
+#include <vector>
+#include <optional>
+using namespace std;
+class Vetor {
+private:
+	int limiteInferior = 0, limiteSuperior = 0;
+	string nome;
+	vector<int> vetor;
+	/* Obtém o índice do objeto Vetor traduzindo o índice virtual de Vetor para o índice real do objeto
+	vector do C++. Se o índice passado como argumento para a função for inválido (estiver fora dos
+	limites do Vetor), o método deve retornar um optional que não tem um valor. Se o índice for válido,
+	o método deve retornar um optional com o número armazenado na posição indicada por
+	indiceVirtual. Veja o exemplo abaixo para um objeto Vetor com 7 elementos e índices virtuais de -3
+	a +3.
+
+	Índice Virtual			Índice Real
+		-3				(limiteInferior) 0
+		-2						1
+		-1					    2
+		 0						3
+		 1						4
+		 2						5
+		 3				(limiteSuperior) 6
+
+*/
+	optional<int> indiceReal(int indiceVirtual);
+	/* Define a capacidade (número máximo de elementos) do objeto Vetor redimensionando o vector
+	para um novo valor. Este método deve ser invocado pelos construtores da classe Vetor.
+	*/
+	void definirTamanho(int tamanho);
+public:
+	/* Cria um objeto Vetor com a quantidade máxima de números definida por capacidade e os índices de
+	acesso definidos de 0 a capacidade - 1.
+	*/
+	Vetor(int capacidade);
+	/* Cria um objeto Vetor com a quantidade máxima de números definida por capacidade e os índices de
+	acesso definidos por limiteInferior e limiteSuperior.
+	*/
+	Vetor(int capacidade, int limiteInferior, int limiteSuperior);
+	void setNome(string nome);
+	string getNome();
+	int getLimiteInferior();
+	int getLimiteSuperior();
+	// Informa o tamanho (número atual de elementos) armazenados no objeto Vetor.
+	int tamanho();
+	// Informa a capacidade (número máximo de elementos) de armazenamento do objeto Vetor.
+	int capacidade();
+	/* Define um intervalo arbitrário de índices do Vetor, em vez de ter obrigatoriamente um intervalo
+	definido de 0 (zero) a N - 1. O intervalo pode ser, por exemplo, de -(N / 2 - 1) a +(N / 2). Para N =
+	200, teremos: -99 a 100 (-99..-1, 0, 1..100).
+	*/
+	void definirIntervalo(int limiteInferior, int limiteSuperior);
+	/* Armazena um número no Vetor. Retorna true se o número foi armazenado. Se não foi possível
+	armazenar porque atingiu a capacidade (número máximo de elementos), retorna false.
+	*/
+	bool adicionar(int numero);
+	/* Obtém, verificando os limites do Vetor, um número de acordo com o índice fornecido. Se o índice
+	passado como argumento para a função for inválido (estiver fora dos limites do Vetor), o método
+	deve retornar um optional que não tem um valor. Se o índice for válido, o método deve retornar um
+	optional com o número armazenado na posição indicado por indice.
+	*/
+	optional<int> obter(int indice);
+	/* Altera um número do Vetor verificando os limites dos índices definidos. O método deve retornar
+	true se a operação foi bem sucedida ou false no caso de erro.
+	*/
+	bool alterar(int indice, int numero);
+	/* Exclui, verificando os limites do Vetor, um número de acordo com o índice fornecido. Se o índice
+	passado como argumento para a função for inválido (estiver fora dos limites do Vetor), o método
+	deve retornar false. Se o índice for válido, o número deve ser excluído do Vetor e o método deve
+	retornar true.
+	*/
+	bool excluir(int indice);
+	/* Compara dois objetos da classe Vetor. Por exemplo: v1.comparar(v2); compara o conteúdo dos
+	objetos v1 e v2. A função deve retornar:
+	- zero se os objetos possuem a mesma quantidade de elementos e são iguais;
+	- um número negativo se este objeto possui menos elementos do que o objeto do parâmetro
+	formal vetor;
+	- um número positivo se este objeto possui mais elementos do que o objeto do parâmetro formal
+	vetor, ou possui a mesma quantidade de elementos, mas os valores são diferentes.
+	*/
+	int comparar(const Vetor& vetor);
+	/* Copia os números do objeto vetor para este objeto. Por exemplo: v1.copiar(v2); copia os números
+	de v2 para v1. Se o número de posições livres de v1 (capacidade - tamanho) não for suficiente para
+	armazenar todos os números de v2 a cópia não pode ser feita. Retorna true se a cópia foi realizada
+	ou false se não.
+	*/
+	bool copiar(const Vetor& vetor);
+	/* Exibe no console todos os números inteiros do objeto Vetor. Se o objeto Vetor possuir um nome,
+	definido pelo método setNome, ele deve ser exibido.
+	*/
+	void exibir();
+};
