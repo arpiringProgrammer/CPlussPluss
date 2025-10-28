@@ -1,3 +1,10 @@
+/*
+4. Desenvolva uma classe chamada Vetor usando o template de classe vector da C++ Standard Library.
+Um objeto da classe Vetor pode armazenar no máximo N elementos do tipo int, onde N representa
+sua capacidade e é definido pelo usuário como parâmetro do construtor da classe Vetor. A
+interface da classe Vetor está listada abaixo e não pode ser modificada.
+*/
+
 arquivo.cpp
 
 
