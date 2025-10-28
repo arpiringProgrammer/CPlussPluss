@@ -129,6 +129,105 @@ void Vetor::exibir() {
     cout << endl;
 }
 
+int Vetor::TestarVetor() {
+    cout << "=== Testando classe Vetor ===\n";
+
+    // Teste do construtor padrão
+    Vetor v1(5);
+    v1.setNome("Vetor v1");
+    cout << "Nome: " << v1.getNome() << endl;
+    cout << "Limites: " << v1.getLimiteInferior() << " a " << v1.getLimiteSuperior() << endl;
+    cout << "Capacidade: " << v1.capacidade() << endl;
+
+    // Teste de adicionar elementos
+    cout << "\nAdicionando elementos ao v1...\n";
+    v1.adicionar(10);
+    v1.adicionar(20);
+    v1.adicionar(30);
+    v1.adicionar(40);
+    v1.adicionar(50);
+    v1.exibir();
+
+    // Teste de obter elemento válido
+    cout << "\nObtendo elemento no índice virtual 2...\n";
+    auto valor = v1.obter(2);
+    if (valor.has_value()) {
+        cout << "Valor obtido: " << valor.value() << endl;
+    }
+    else {
+        cout << "Índice inválido.\n";
+    }
+
+    // Teste de alterar elemento
+    cout << "\nAlterando valor no índice virtual 1 para 99...\n";
+    if (v1.alterar(1, 99)) {
+        cout << "Alteração feita.\n";
+    }
+    else {
+        cout << "Falha na alteração.\n";
+    }
+    v1.exibir();
+
+    // Teste de excluir elemento
+    cout << "\nExcluindo elemento no índice virtual 0...\n";
+    if (v1.excluir(0)) {
+        cout << "Exclusão feita.\n";
+    }
+    else {
+        cout << "Falha na exclusão.\n";
+    }
+    v1.exibir();
+
+    // Teste do construtor com intervalo personalizado
+    Vetor v2(7, -3, 3);
+    v2.setNome("Vetor v2");
+    cout << "\nCriado vetor v2 com intervalo -3 a 3.\n";
+    v2.adicionar(1);
+    v2.adicionar(2);
+    v2.adicionar(3);
+    v2.adicionar(4);
+    v2.adicionar(5);
+    v2.adicionar(6);
+    v2.adicionar(7);
+    v2.exibir();
+
+    // Teste de comparação
+    cout << "\nComparando v1 com v2...\n";
+    int resultado = v1.comparar(v2);
+    if (resultado == 0) {
+        cout << "Vetores são iguais.\n";
+    }
+    else if (resultado < 0) {
+        cout << "v1 tem menos elementos que v2.\n";
+    }
+    else {
+        cout << "v1 tem mais elementos ou valores diferentes.\n";
+    }
+
+    // Teste de cópia
+    cout << "\nCopiando v2 para v1...\n";
+    if (v1.copiar(v2)) {
+        cout << "Cópia realizada.\n";
+    }
+    else {
+        cout << "Cópia falhou.\n";
+    }
+    v1.exibir();
+
+    // Teste de redefinir intervalo
+    cout << "\nRedefinindo intervalo de v1...\n";
+    v1.definirIntervalo(0, 0); // parâmetros ignorados
+    cout << "Novos limites: " << v1.getLimiteInferior() << " a " << v1.getLimiteSuperior() << endl;
+
+    cout << "\n=== Fim dos testes ===\n";
+
+    return 0;
+}
+
+int main() {
+    return Vetor().TestarVetor();
+}
+
 
 
 
